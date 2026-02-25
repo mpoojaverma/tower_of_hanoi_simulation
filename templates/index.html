@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Tower of Hanoi Solver</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Tower of Hanoi Solver</h1>
+
+        <div class="controls">
+            <label for="disk-input">Disks (3-8):</label>
+            <input type="number" id="disk-input" value="4" min="3" max="8">
+
+            <label for="speed-input">Speed (ms):</label>
+            <input type="range" id="speed-input" value="500" min="100" max="1500" step="100">
+            <span id="speed-value">500ms</span>
+
+            <button id="solve-btn" onclick="generateAndStart()">Generate & Start</button>
+            <button id="next-btn" onclick="nextMove()" disabled>Next Step</button>
+            <button id="auto-btn" onclick="toggleAutoRun()" disabled>Auto Run</button>
+        </div>
+
+        <div class="status-bar">
+            <span id="status-message">Ready</span>
+        </div>
+
+        <div class="main-content">
+            <svg id="hanoi-canvas" width="650" height="450"></svg>
+
+            <div class="sidebar">
+                <h2>Solution Guidance</h2>
+                <div id="explanation-content">
+                    <p>Click "Generate & Start" to begin the solution.</p>
+                    <p>Instructions for each disk move will appear here.</p>
+                </div>
+                <div class="move-counter">
+                    <p>Move: <span id="current-move-num">0</span> / <span id="total-moves-num">0</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/hanoi.js') }}"></script>
+</body>
+</html>
