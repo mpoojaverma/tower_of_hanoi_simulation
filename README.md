@@ -13,10 +13,11 @@ https://tower-of-hanoi-solver.onrender.com
 
 A full-stack Tower of Hanoi visualization system. The backend computes the optimal recursive move sequence and exposes it via `/solve`; the frontend replays that sequence with SVG animation and synchronized step explanations.
 
-## Preview
+# Preview
 
-<video src="screenshots/demo.mp4" controls width="900"></video>
+![Demo](screenshots/demo.gif)
 
+[Watch MP4 Version](screenshots/demo.mp4)
 
 ## Architecture
 
