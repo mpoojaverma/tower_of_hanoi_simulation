@@ -3,35 +3,42 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-2.3.x-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-Frontend-F7DF1E?logo=javascript&logoColor=000)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![License](https://img.shields.io/badge/License-MIT-informational)](./LICENSE)
-
-A full-stack visualization system for solving and animating the Tower of Hanoi puzzle. The backend computes optimal move sequences using recursion; the frontend renders and animates those moves on an SVG canvas with synchronized explanatory guidance.
+[![Deploy](https://img.shields.io/badge/Deploy-Render-46E3B7?logo=render&logoColor=000)](https://render.com/)
 
 ## Live Demo
 
-Add your deployed URL here:
+https://tower-of-hanoi-solver.onrender.com
 
-- `https://<your-demo-url>`
+## Overview
+
+A full-stack Tower of Hanoi visualization system. The backend computes the optimal recursive move sequence and exposes it via `/solve`; the frontend replays that sequence with SVG animation and synchronized step explanations.
+
+## Preview
+
+<video src="screenshots/demo.mp4" controls width="900"></video>
+
 
 ## Architecture
 
 ```text
-User Input (N, speed)
+User Input (disk count, speed)
         |
         v
-Frontend (hanoi.js)
-  - POST /solve via fetch()
-  - Receives move list
-  - Animates SVG state transitions
+Frontend (static/js/hanoi.js)
+  - Sends POST /solve using fetch()
+  - Receives ordered move sequence
+  - Updates SVG disk positions per step
   - Updates explanation sidebar
         |
         v
-Backend (Flask)
-  app.py -> /solve
+Backend (app.py)
+  - GET /
+  - POST /solve
         |
         v
-Recursive Solver (solver/hanoi_solver.py)
-  - Generates optimal move sequence
+Solver (solver/hanoi_solver.py)
+  - Recursive move generation
+  - Optimal sequence: 2^N - 1 moves
 ```
 
 ## Algorithmic Complexity
@@ -39,41 +46,21 @@ Recursive Solver (solver/hanoi_solver.py)
 For `N` disks:
 
 - Time complexity: `O(2^N)`
-- Space complexity: `O(N)` recursion depth
-
-The solver returns the canonical optimal sequence of `2^N - 1` moves.
-
-## Backend-Frontend Interaction
-
-1. Client reads disk count from the UI.
-2. Client sends `POST /solve` with JSON payload:
-
-```json
-{ "disks": 4 }
-```
-
-3. Flask validates input bounds and invokes the recursive solver.
-4. API responds with ordered move tuples:
-
-```json
-{
-  "moves": [[1,0,1],[2,0,2],[1,1,2], ...]
-}
-```
-
-5. Frontend consumes the move stream and performs deterministic SVG updates per step.
+- Space complexity: `O(N)`
 
 ## Tech Stack
 
-- Backend: Python, Flask
-- Solver: Recursive divide-and-conquer implementation
-- Frontend: Vanilla JavaScript, HTML, CSS
-- Rendering: SVG-based disk/peg visualization
-- Transport: REST API (`fetch`, JSON)
+- Python 3.10+
+- Flask
+- Gunicorn
+- Vanilla JavaScript
+- HTML/CSS
+- SVG
+- Render
 
 ## Local Setup
 
-### 1) Clone and enter project
+### 1) Clone
 
 ```bash
 git clone <repo-url>
@@ -86,73 +73,56 @@ cd tower-of-hanoi-solver
 python -m venv venv
 ```
 
-Windows PowerShell:
-
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-macOS/Linux:
-
-```bash
-source venv/bin/activate
-```
-
 ### 3) Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4) Run server
+### 4) Run
 
 ```bash
 python app.py
 ```
 
-Open `http://127.0.0.1:5000`.
+Open: `http://127.0.0.1:5000`
+
+## Deployment
+
+Deployed on Render with Gunicorn.
 
 ## Project Structure
 
 ```text
 tower-of-hanoi-solver/
-+-- app.py
-+-- solver/
-¦   +-- hanoi_solver.py
+-- app.py
+-- solver/
+   +-- __init__.py
+   +-- hanoi_solver.py
 +-- templates/
-¦   +-- index.html
+   +-- index.html
 +-- static/
-¦   +-- css/
-¦   ¦   +-- style.css
-¦   +-- js/
-¦       +-- hanoi.js
+   +-- css/
+      +-- style.css
+   +-- js/
+      +-- hanoi.js
++-- screenshots/
+   +-- demo.mp4
+   +-- tower of hanoi.jpeg
 +-- requirements.txt
++-- README.md
 ```
 
-## Engineering Concepts Demonstrated
-
-- Recursive problem decomposition with strict optimality constraints
-- Separation of concerns across API, solver logic, and UI renderer
-- Stateless API design with deterministic client-side replay
-- Input validation and bounded execution safeguards
-- UI-state synchronization between algorithmic steps and explanatory narrative
-
-## API Contract
-
-### `POST /solve`
-
-Request:
-
-```json
-{ "disks": 3 }
-```
-
-Responses:
+## Responses
 
 - `200 OK`: move sequence payload
 - `400 Bad Request`: invalid disk count
 - `500 Internal Server Error`: unexpected server error
 
----
+## Screenshots
 
-If you deploy this project, replace the demo and repository placeholders with production URLs.
+GUI previews (.jpeg and .mp4) are available in the screenshots/ directory.
+
+## Educational Context
+
+Developed as part of Data Structures and Algorithms coursework to provide an interactive understanding of recursion, divide-and-conquer strategies, and exponential-time algorithm behavior.
